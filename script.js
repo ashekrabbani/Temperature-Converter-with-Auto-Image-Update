@@ -1,103 +1,94 @@
-const submit = document.querySelector(".btn")
-const celcius = document.querySelector("#celcius")
-const fahrenheit = document.querySelector("#fahrenheit")
-const kelvin = document.querySelector("#kelvin")
-const image = document.querySelector("#image")
+const todoinput = document.querySelector(".todo-input")
+const btn = document.querySelector(".btn")
+const todo = document.querySelector(".todo ul")
+const edit = document.querySelector(".edit")
+const dlt = document.querySelector("#dlt")
 
-let temp = ''
-
-const updateimage = {
-    cold: 'https://plus.unsplash.com/premium_photo-1695290757424-06b72bf518e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1pbi1zYW1lLXNlcmllc3wxfHx8ZW58MHx8fHx8',
-    warm: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    hot: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-    lava: 'https://plus.unsplash.com/premium_photo-1665392924019-b72d80a63bfb?w=300&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDh8fHxlbnwwfHx8fHw%3D'
+const addtodo = (text) => {
+    if(text){
+        const newtodo =`
+                <li class="stodo">
+                    <div>
+                    <button class="btn1 edit"><i class="fa-regular fa-calendar-check check"></i></i></button>
+                    <span class="gm">
+                        ${text}
+                    </span>
+                    </div>
+                    <div class="icon">
+                        <button class="btn1 edit"><i class="fi fi-rr-edit editbtn"></i></button>
+                        <button class="btn1" id="dlt"><i class="fi fi-rr-trash dltbtn"></i></button>
+                    </div>
+                </li>
+        `
+        todo.innerHTML += newtodo
+        todoinput.value = "";
+        todoinput.focus()
+    }
 }
 
-const changeimage = (temp, updateimage) => {
-    if(temp<= 0) {
-        image.setAttribute('src', updateimage.cold);
+const editTodo = (text) =>{
+    let newTodo = prompt('Edit todo', text.trim())
+    if(!newTodo){
+        newTodo = prompt('Edit todo', text.trim())
+    }else{
+        return newTodo
     }
-    else if (temp > 0 && temp <= 30) {
-        image.setAttribute('src', updateimage.warm);
-    }
-    else if (temp <= 99){
-        image.setAttribute('src', updateimage.hot);
-    }
-    else if (temp >= 100) {
-        image.setAttribute('src', updateimage.lava);
-    }
-} 
-
-let lastedit = '';
-
-//const updatelastedit = () => {
-(() => {
-//    celcius.addEventListener('change', (e) => {
-//       console.log(celcius.value)   });
-//     fahrenheit.addEventListener('change', (e) => {
-//       console.log(fahrenheit.value)
-//    });
-//    kelvin.addEventListener('change', (e) => {
-//       console.log(kelvin.value)
-//    });
-    // celcius.addEventListener('keyup', () => {
-    //     console.log(celcius.value) });
-    // fahrenheit.addEventListener('keyup', () => {
-    //     console.log(fahrenheit.value)
-    // });
-    // kelvin.addEventListener('keyup', (e) => {
-    //     console.log(e.target.value)
-    // });
-            celcius.addEventListener('keyup', () => {
-            lastedit = 'celcius'
-            // console.log(lastedit)
-            });
-            fahrenheit.addEventListener('keyup', () => {
-            lastedit = 'fahrenheit'
-            // console.log(lastedit)
-            });
-            kelvin.addEventListener('keyup', (e) => {
-            lastedit = 'kelvin'
-            // console.log(lastedit)
-            });
-})();
-// }
-// updatelastedit();
-const convert = (lastedit) => {
-    if (lastedit === 'celcius') {
-        const f = (parseFloat(celcius.value)* 9/5) + 32;
-        const k = (parseFloat(celcius.value)) + 273.15;
-        fahrenheit.value = Math.floor(f);
-        kelvin.value = Math.floor(k);
-
-        changeimage(parseFloat(celcius.value), updateimage);
-    }
-    else if (lastedit === 'fahrenheit') {
-        const c = (parseFloat(fahrenheit.value) - 32) * 5/9;
-        const k = (parseFloat(fahrenheit.value) - 32) * 5/9 + 273.15;
-        celcius.value = Math.floor(c);
-        kelvin.value = Math.floor(k);
-
-        changeimage(parseFloat(c), updateimage);
-    }
-    else if (lastedit === 'kelvin') {
-        const c = (parseFloat(kelvin.value)) - 273.15;
-        const f = (parseFloat(kelvin.value) - 273.15) * 9/5 + 32;
-        celcius.value = Math.floor(c);
-        fahrenheit.value = Math.floor(f);
-
-        changeimage(parseFloat(c), updateimage);
-    }
-
 }
 
+todo.addEventListener('click', (e) => {
+ 
+    if(e.target.classList.contains('stodo')){
+        e.target.classList.toggle('cplttodo');
+        // e.target.classList.toggle('open');
+    }
 
-submit.addEventListener('click', () => {
-    convert(lastedit);
+    if(e.target.nodeName === "SPAN"){
+    e.target.parentElement.parentElement.classList.toggle('cplttodo')};
+
+    
+    if(e.target.classList.contains('dltbtn')){
+       e.target.parentElement.parentElement.parentElement.remove()
+        // const span = document.querySelector(".gm");
+        // console.log(span)
+        // span.classList.toggle('dlttodo');
+    }
+
+    if(e.target.classList.contains('check')){
+        const span = document.querySelector(".gm");
+         span.classList.toggle('dlttodo');
+    }
+
+    // if(e.target.classList.contains('editbtn')){
+    //     let todoedited =e.target.parentElement.parentElement.parentElement.querySelector("span").innerText;
+
+    //     document.querySelector(".todo-input").value = todoedited
+
+    // }
+    if(e.target.classList.contains('editbtn')){
+        const editedtodo = editTodo(e.target.parentElement.parentElement.parentElement.querySelector("span").innerText)
+        e.target.parentElement.parentElement.parentElement.querySelector("span").innerHTML = `
+        <span class="gm">
+            ${editedtodo}
+        </span>`
+    }
+ })
+
+ btn.addEventListener('click', () => {
+    addtodo(todoinput.value)
 })
-document.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-        // submit.click();
-        convert(lastedit);
+
+document.addEventListener('keyup', (e) =>{
+    if (e.key === 'Enter'){
+        addtodo(todoinput.value)
     }
-});
+})
+
+
+// todo.addEventListener('click', (e) => {
+//         let li = e.target.closest(".stodo");
+//         let gmSpan = li.querySelector(".gm");
+//         gmSpan.classList.toggle("cplttodo");
+
+//         if (!li) return;
+//         li.classList.toggle("open");
+// })
